@@ -8,7 +8,8 @@ import com.tenpo.tenpobackendtest.models.LoginRequest;
 import com.tenpo.tenpobackendtest.models.UserResponse;
 import com.tenpo.tenpobackendtest.services.AuditService;
 import com.tenpo.tenpobackendtest.services.UserService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ import org.springframework.web.client.HttpServerErrorException;
 
 @RestController
 @RequestMapping("/users")
+@Tag(name = "History")
 public class UserController {
 
     @Autowired
@@ -30,7 +32,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value="User login")
+    @Operation(summary="User login")
     public ResponseEntity<String> login(@RequestBody LoginRequest user) {
         try {
             String authToken = userService.autenticateUser(user.getUser(), user.getPassword());
@@ -46,7 +48,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value="User logout")
+    @Operation(summary="User logout")
     public ResponseEntity<String> logout(@RequestBody LoginRequest user) {
         try {
             auditService.saveAudit("/users/logout");
@@ -59,7 +61,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value="User registration")
+    @Operation(summary="User registration")
     public ResponseEntity<UserResponse> createUser(@RequestBody User user) {
         try {
             auditService.saveAudit("/users/create");

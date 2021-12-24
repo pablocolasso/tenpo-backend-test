@@ -4,7 +4,8 @@ import com.tenpo.tenpobackendtest.exeptions.UnautorizedException;
 import com.tenpo.tenpobackendtest.services.AuditService;
 import com.tenpo.tenpobackendtest.services.MathService;
 import com.tenpo.tenpobackendtest.services.UserService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/math")
+@Tag(name = "Users")
 public class MathController {
 
 
@@ -25,7 +27,7 @@ public class MathController {
 
     @Validated
     @GetMapping("/sum")
-    @ApiOperation(value = "${MathController./sum")
+    @Operation(summary = "${MathController./sum")
     public ResponseEntity<Double> sum(
             @RequestParam(value = "value1") double value1,
             @RequestParam(value = "value2") double value2,
