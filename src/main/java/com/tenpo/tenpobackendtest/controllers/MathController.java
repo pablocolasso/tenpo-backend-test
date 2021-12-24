@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/math")
-@Tag(name = "Users")
+@Tag(name = "Math Operation")
 public class MathController {
 
 
@@ -31,7 +31,7 @@ public class MathController {
     public ResponseEntity<Double> sum(
             @RequestParam(value = "value1") double value1,
             @RequestParam(value = "value2") double value2,
-            @RequestHeader(value = "x-auth-token", required = false) String auth) {
+            @RequestHeader(value = "x-auth-token") String auth) {
         if (userService.validateJwt(auth)) {
             auditService.saveAudit("/math/sum?value1=" + value1 + "&value2=" + value2);
             return ResponseEntity.ok(mathService.sum(value1 , value2));

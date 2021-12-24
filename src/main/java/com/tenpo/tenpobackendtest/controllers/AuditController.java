@@ -28,7 +28,7 @@ public class AuditController {
     public ResponseEntity<Page<Audit>> getHistory(
             @RequestParam(value = "page-number") Integer page_number,
             @RequestParam(value = "size") Integer size,
-            @RequestHeader(value = "x-auth-token", required = false) String auth) {
+            @RequestHeader(value = "x-auth-token") String auth) {
         if (userService.validateJwt(auth)) {
             Page<Audit> auditServiceHistory = auditService.getHistory(page_number, size);
             return new ResponseEntity<>(auditServiceHistory, HttpStatus.OK);

@@ -46,22 +46,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String autenticateUser(String user, String password) throws UnautorizedException {
-        if (user == null) {
-            throw new BadRequestException("User is empty.");
-        }
-        if (password == null) {
-            throw new BadRequestException("Password is empty.");
-        }
-        User userFromRepo = userRepository.findByUserid(user);
-        if (userFromRepo == null) {
-            throw new NotFoundException("User was not found. Please enter a valid one.");
-        }
+        validateUserAndPasswordNotEmpty(user, password);
+        User userFromRepo = getUserFromRepo(user);
         if (userFromRepo.getPassword().equals(password)) {
-            User userFromDb = userRepository.findByUserid(user);
             String jwt = createJWT(user, password);
             Claims claims = Jwts.parser().setSigningKey(Static.SECRET).parseClaimsJws(jwt).getBody();
-            userFromDb.setTokenVersion(claims.getId());
-            userRepository.save(userFromDb);
+            userFromRepo.setTokenVersion(claims.getId());
+            userRepository.save(userFromRepo);
             return jwt;
         } else {
             throw new UnautorizedException("Invalid password.");
@@ -119,20 +110,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteToken(String user, String password) throws UnautorizedException {
-        if (user == null) {
-            throw new BadRequestException("User is empty.");
-        }
-        if (password == null) {
-            throw new BadRequestException("Password is empty.");
-        }
-        User userFromRepo = userRepository.findByUserid(user);
-        if (userFromRepo == null) {
-            throw new NotFoundException("User was not found. Please enter a valid one.");
-        }
+        validateUserAndPasswordNotEmpty(user, password);
+        User userFromRepo = getUserFromRepo(user);
         if (userFromRepo.getPassword().equals(password)) {
-            User userFromDb = userRepository.findByUserid(user);
-            userFromDb.setTokenVersion("");
-            userRepository.save(userFromDb);
+            userFromRepo.setTokenVersion("");
+            userRepository.save(userFromRepo);
         } else {
             throw new UnautorizedException("Invalid password.");
         }
@@ -143,6 +125,22 @@ public class UserServiceImpl implements UserService {
         return user.getUserid() != null && user.getPassword() != null && user.getFullName() != null && user.getEmail() != null && user.getAddress() != null;
     }
 
+    public static void validateUserAndPasswordNotEmpty(String usr, String password) throws BadRequestException {
+        if (usr == null) {
+            throw new BadRequestException("User is empty.");
+        }
+        if (password == null) {
+            throw new BadRequestException("Password is empty.");
+        }
+    }
+
+    public User getUserFromRepo(String userId) throws NotFoundException{
+        User userFromRepo = userRepository.findByUserid(userId);
+        if (userFromRepo == null) {
+            throw new NotFoundException("User was not found. Please enter a valid one.");
+        }
+        return userFromRepo;
+    }
 
 
 }

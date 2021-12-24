@@ -22,7 +22,7 @@ import org.springframework.web.client.HttpServerErrorException;
 
 @RestController
 @RequestMapping("/users")
-@Tag(name = "History")
+@Tag(name = "Users")
 public class UserController {
 
     @Autowired
@@ -62,15 +62,17 @@ public class UserController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary="User registration")
-    public ResponseEntity<UserResponse> createUser(@RequestBody User user) {
+    public ResponseEntity<String> createUser(@RequestBody User user) {
         try {
             auditService.saveAudit("/users/create");
             userService.createUser(user);
-            return new ResponseEntity<>(new UserResponse(user, null), HttpStatus.OK);
+            return new ResponseEntity<>("User: "+user.getUserid()+" created successfully", HttpStatus.OK);
         } catch (UnautorizedException e) {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-        } catch (UserAlreadyRegisteredException ae) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        } catch (UserAlreadyRegisteredException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (BadRequestException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

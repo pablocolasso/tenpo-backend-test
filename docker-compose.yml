@@ -2,6 +2,7 @@ version: '2'
 
 services:
   app:
+    image: 'tenpo-backend-test:1.0.1'
     build:
       context: .
       dockerfile: Dockerfile

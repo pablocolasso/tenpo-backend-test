@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.tenpo</groupId>
 	<artifactId>tenpo-backend-test</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<name>tenpo-backend-test</name>
 	<description>This project was created to resolve the backend challenge.</description>
 	<properties>
