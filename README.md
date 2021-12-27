@@ -49,7 +49,7 @@ To run the app please execute the following command line. Note: you have to run 
 
 ----------
 
-## Insomnia/postman collection
+## Swagger and Insomnia/postman collection
 Attached on te email is the json collection to test the application. Note: when we use the jwt in the x-auth-token you should use like this e.g. "Bearer token". Replace the token after the space. 
 ```
 http://localhost:8080/swagger-ui.html
